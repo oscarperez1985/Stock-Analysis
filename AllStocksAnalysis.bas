@@ -20,10 +20,15 @@ End Sub
 'Subroutine name
 Sub AllStocksAnalysis()
 
+'Variables for measuring performance
+Dim startTime, endTime As Single
+
 '1) Format the output sheet on the "All Stocks Analysis" worksheet.
 Worksheets("All Stocks Analysis").Activate
 
 yearValue = InputBox("What year would you like to run the analysis on?")
+
+startTime = Timer
 
     Range("A1").Value = "All Stocks (" + yearValue + ")"
     
@@ -94,6 +99,12 @@ Worksheets("All Stocks Analysis").Activate
     Cells(4 + i, 3).Value = endingPrice / startingPrice - 1
     
 Next i
+
+endTime = Timer
+
+'Display elapsed runnin time
+MsgBox "This code ran in " & (endTime - startTime) & " seconds for the year " & (yearValue)
+
 
 End Sub
 
