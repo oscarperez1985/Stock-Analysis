@@ -4,12 +4,28 @@ Attribute VB_Name = "AllStocksAnalysis"
 '============================================================
 
 'Subroutine name
+Sub ClearAllStocksAnalysisSheet()
+
+'Activate output worksheet
+Worksheets("All Stocks Analysis").Activate
+
+Cells.Clear
+
+End Sub
+
+'============================================================
+'DEFINE SUBROUTINE
+'============================================================
+
+'Subroutine name
 Sub AllStocksAnalysis()
 
 '1) Format the output sheet on the "All Stocks Analysis" worksheet.
 Worksheets("All Stocks Analysis").Activate
 
-    Range("A1").Value = "All Stocks (2018)"
+yearValue = InputBox("What year would you like to run the analysis on?")
+
+    Range("A1").Value = "All Stocks (" + yearValue + ")"
     
     'Create a header row
     Range("A3").Value = "Ticker"
@@ -40,7 +56,7 @@ tickers(11) = "VSLR"
     Dim endingPrice As Single
         
     '3b) Activate the data worksheet.
-    Worksheets("2018").Activate
+    Worksheets(yearValue).Activate
     
     '3c) Find the number of rows to loop over.
     RowCount = Cells(rows.Count, "A").End(xlUp).Row
@@ -52,7 +68,7 @@ For i = 0 To 11
     totalVolume = 0
 
 '5) Loop through rows in the data.
-    Worksheets("2018").Activate
+    Worksheets(yearValue).Activate
     For j = 2 To RowCount
     '5a) Find the total volume for the current ticker.
         If Cells(j, 1).Value = ticker Then
@@ -79,6 +95,8 @@ Worksheets("All Stocks Analysis").Activate
     
 Next i
 
+End Sub
+
 '============================================================
 'DEFINE SUBROUTINE
 '============================================================
@@ -90,5 +108,29 @@ Sub formatAllStocksAnalysisTable()
 Worksheets("All Stocks Analysis").Activate
 
 'Format the active worksheet
+[A3:C3].Font.Bold = True
+[A3:C3].Borders(xlEdgeBottom).LineStyle = xlContinuous
+[A3:C3].Font.Size = 12
+[A3:C3].Font.Color = vbBlue
+[B4:B15].NumberFormat = "#,##0"
+[C4:C15].NumberFormat = "0.00%"
+Columns("B").AutoFit
+
+dataRowStart = 4
+dataRowEnd = 15
+
+For i = dataRowStart To dataRowEnd
+
+    If Cells(i, 3) > 0 Then
+     'Set the color of the cell to green
+     Cells(i, 3).Interior.Color = vbGreen
+    ElseIf Cells(i, 3) < 0 Then
+     'Set the color of the cell to red
+     Cells(i, 3).Interior.Color = vbRed
+    Else
+     'Clear the cell color
+     Cells(i, 3).Interior.Color = xlNone
+    End If
+Next i
 
 End Sub
